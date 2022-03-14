@@ -4,7 +4,36 @@
 
 # Todo_App
 
-App Design ✏ :  [!TODO](https://dribbble.com/shots/14100356-ToDo-App-UI) 
+App Design ✏ :  [TODO](https://dribbble.com/shots/14100356-ToDo-App-UI) 
+
+Todo : 
+ - Sqlite Database
+ - Animation
+ - DarkMod 🌙
+ - Shared Preferences
+ - Making a task for everyday ♥
+ - And a lot thing ...
+ - ....... . ... .. . . . . . .. . .. . . . . . .. . 
+
+I hope you can use it in your daily work 😅
+
+ Rate me ⭐
+
+Thank you ☺
+
+## Platform
+
+Android ✔️
+
+Ios ✔️
+
+
+## Development Setup
+Clone the repository and run the following commands:
+```
+flutter pub get
+flutter run
+```
 
 ## Getting Started
 
