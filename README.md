@@ -2,9 +2,9 @@
 [![GitHub stars](https://img.shields.io/github/stars/iampawan/FlutterExampleApps.svg?style=social&label=Star)](https://github.com/amirziyacode)
 [![GitHub forks](https://img.shields.io/github/forks/iampawan/FlutterExampleApps.svg?style=social&label=Fork)](https://github.com/amirziyacode?tab=repositories)
 
-# flutter_todo
+# Todo_App
 
-A new Flutter project.
+App Design ✏ :  [!TODO](https://dribbble.com/shots/14100356-ToDo-App-UI) 
 
 ## Getting Started
 
