@@ -28,8 +28,8 @@ Android ✔️
 Ios ✔️
 
 ## Preview
-![Dark](https://s6.uupload.ir/files/dark_rtel.gif)
-![Light](https://s6.uupload.ir/files/white_bek4.gif)
+![Dark](https://s6.uupload.ir/files/dark_rtel.gif) ![Light](https://s6.uupload.ir/files/white_bek4.gif)
+
 
 
 ## Development Setup
