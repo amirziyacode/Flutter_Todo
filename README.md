@@ -28,7 +28,7 @@ Android ✔️
 Ios ✔️
 
 ## Preview
-![Dark](https://s6.uupload.ir/files/dark_rtel.gif) ![Light](<img src="https://s6.uupload.ir/files/white_bek4_thumb.gif" alt="")
+![Dark](https://s6.uupload.ir/files/dark_rtel.gif)
 
 
 
