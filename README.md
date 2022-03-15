@@ -27,9 +27,12 @@ Android ✔️
 
 Ios ✔️
 
-## Preview
-![Dark](https://s6.uupload.ir/files/dark_rtel.gif)
 
+### ✌&ensp;Preview
+
+|              App Preview             |             Course Preview           |
+| :----------------------------------: | :----------------------------------: |
+| <a href="https://www.youtube.com/watch?v=eENDlIgadr4" target="_blank"><img src="preview.gif" width="350"></a> | <a href="https://johannesmilke.teachable.com/p/home" target="_blank"><img src="https://firebasestorage.googleapis.com/v0/b/web-johannesmilke.appspot.com/o/other%2Fgithub_ad.png?alt=media" width="350"></a> |
 
 
 ## Development Setup
