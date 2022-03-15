@@ -116,6 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: we * 2,
                 height: he * 0.16,
                 child: ListView.builder(
+                 physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, i) {
                     return Card(
                       margin: const EdgeInsets.only(left: 23),
@@ -198,6 +199,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       color: Theme.of(context).primaryColor,
                                     )))
                             : ListView(
+                               physics: const BouncingScrollPhysics(),
                                 children: notes.map((note) {
                                 final IsSelected = all_selected_tasks
                                     .contains(note.description);
