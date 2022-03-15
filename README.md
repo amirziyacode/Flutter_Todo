@@ -30,7 +30,7 @@ Ios ✔️
 
 ### ✌&ensp;Preview
 
-|               DarkMode               |                WhiteMode             |
+|               DarkMode               |              WhiteMode               |
 | :----------------------------------: | :----------------------------------: |
 | ![d](https://s6.uupload.ir/files/dark_eeko.gif) | ![w](https://s6.uupload.ir/files/white_2cay.gif) |
 
