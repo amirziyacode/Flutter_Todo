@@ -32,7 +32,7 @@ Ios ✔️
 
 |               DarkMode               |              WhiteMode               |
 | :----------------------------------: | :----------------------------------: |
-|  ![w](https://s6.uupload.ir/files/white_2cay.gif) |![d](https://s6.uupload.ir/files/dark_eeko.gif)
+| ![d](https://s6.uupload.ir/files/dark_eeko.gif) | ![w](https://s6.uupload.ir/files/white_2cay.gif) |
 
 
 ## Development Setup
