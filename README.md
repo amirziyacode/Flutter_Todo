@@ -32,7 +32,7 @@ Ios ✔️
 
 |              Darkmode                |             Course Preview           |
 | :----------------------------------: | :----------------------------------: |
-| <a href="https://uupload.ir/view/white_bek4.gif" target="_blank"><img src="https://s6.uupload.ir/files/white_bek4_thumb.gif" border="0" width="350" /></a> | <a href="https://johannesmilke.teachable.com/p/home" target="_blank"><img src="https://firebasestorage.googleapis.com/v0/b/web-johannesmilke.appspot.com/o/other%2Fgithub_ad.png?alt=media" width="350"></a> |
+| <a href="https://uupload.ir/view/white_bek4.gif" target="_blank"><img src="https://uupload.ir/view/white_bek4.gi" border="0" width="350" /></a> | <a href="https://johannesmilke.teachable.com/p/home" target="_blank"><img src="https://firebasestorage.googleapis.com/v0/b/web-johannesmilke.appspot.com/o/other%2Fgithub_ad.png?alt=media" width="350"></a> |
 
 
 ## Development Setup
