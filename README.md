@@ -30,9 +30,9 @@ Ios ✔️
 
 ### ✌&ensp;Preview
 
-|              Darkmode                |             Course Preview           |
+|               WhiteMode              |              DarkMode                |
 | :----------------------------------: | :----------------------------------: |
-| ![d](https://s6.uupload.ir/files/white_bek4.gif) | <a href="https://johannesmilke.teachable.com/p/home" target="_blank"><img src="https://firebasestorage.googleapis.com/v0/b/web-johannesmilke.appspot.com/o/other%2Fgithub_ad.png?alt=media" width="350"></a> |
+| ![d](https://s6.uupload.ir/files/dark_eeko.gif) | ![w](https://s6.uupload.ir/files/white_bek4.gif)
 
 
 ## Development Setup
