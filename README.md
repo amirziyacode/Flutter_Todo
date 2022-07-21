@@ -9,7 +9,7 @@ App Design ✏ :  [TODO](https://dribbble.com/shots/14100356-ToDo-App-UI)
 Todo : 
  - Sqlite Database
  - Animation
- - DarkMod 🌙
+ - DarkMode 🌙
  - Shared Preferences
  - Making a task for everyday ♥
  - And a lot thing ...
