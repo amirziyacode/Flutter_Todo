@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/model/note.dart';
-
+import 'package:flutter_todo/db/noted.dart';
 
 class CardTasks extends StatelessWidget {
-  Note taskuser;
+  Notes taskuser;
   bool isActive;
 
   int Index;
@@ -14,20 +13,29 @@ class CardTasks extends StatelessWidget {
     Colors.purple,
     Colors.orange
   ];
-  ValueChanged<Note> onSelected;
+  ValueChanged<Notes> onSelected;
 
   CardTasks(
       {Key? key,
       required this.taskuser,
       required this.isActive,
       required this.Index,
-      // required this.animation,
-      required this.onSelected})
-      : super(key: key);
+      required this.onSelected}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final color = colorIcon[Index % colorIcon.length];
+    Color color = Colors.red;
+    if (taskuser.title == "Business") {
+      color = const Color(0xFFAC05FF);
+    } else if (taskuser.title == "Personal") {
+      color = const Color(0xFF0011FF);
+    } else if (taskuser.title == "Sports") {
+      color = Colors.red;
+    } else if (taskuser.title == "School") {
+      color = Colors.green;
+    } else if (taskuser.title == "Family") {
+      color = Colors.orange;
+    }
     var we = MediaQuery.of(context).size.width;
     var he = MediaQuery.of(context).size.height;
 
@@ -47,7 +55,8 @@ class CardTasks extends StatelessWidget {
                   child: isActive
                       ? const Icon(Icons.check_circle_outlined,
                           color: Colors.grey)
-                      :  Icon(
+                      
+                      : Icon(
                           Icons.circle_outlined,
                           color: color,
                         ),
