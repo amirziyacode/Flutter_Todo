@@ -16,7 +16,7 @@ class NoteFormWidget extends StatelessWidget {
     
     return Container(
       width: we * 8,
-      height: he * 0.49,
+      height: he * 0.12,
       margin: EdgeInsets.only(top: he * 0.3, left: we * 0.1),
       child: TextFormField(
         // initialValue: widget.note?.description,
