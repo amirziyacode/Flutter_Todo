@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_todo/Animation/fadeAnimation.dart';
+import 'package:flutter_todo/main.dart';
 import 'package:flutter_todo/pages/note_task.dart';
 import 'package:flutter_todo/db/boxes.dart';
 import 'package:flutter_todo/db/noted.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:lottie/lottie.dart';
 import 'package:page_transition/page_transition.dart';
 import '../data/shared/Task_saved.dart';
 import '../data/tasks.dart';
@@ -26,16 +28,63 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<String> all_selected_tasks = []; // your tasks
 
+  int Business = 0;
+  int Personal = 0;
+  int Programming = 0;
+  int Sports = 0;
+  int Family = 0;
+
   bool isLoading = false;
+  final noted = box.values.toList().cast<Notes>();
+
+  void refresh() {
+    setState(() {
+      noted.forEach((element) {});
+    });
+  }
+
+  void cheakTag() {
+    noted.forEach((element) {
+      if (element.title == "Business") {
+        setState(() {
+          Business++;
+        });
+      } else if (element.title == "Personal") {
+        setState(() {
+          Personal++;
+        });
+      } else if (element.title == "Programming") {
+        setState(() {
+          Programming++;
+        });
+      } else if (element.title == "Sports") {
+        setState(() {
+          Sports++;
+        });
+      } else if (element.title == "Family") {
+        setState(() {
+          Family++;
+        });
+      } else {
+        Business = 0;
+        Personal = 0;
+        Programming = 0;
+        Sports = 0;
+        Family = 0;
+      }
+    });
+  }
 
   void initState() {
     all_selected_tasks = TaskerPreference.getString() ?? [];
+    cheakTag();
+    refresh();
     super.initState();
   }
 
   @override
   void dispose() {
-    // TODO: close Database of Note ...
+    // TODO: close Hive_Database of Note ...
     Hive.close();
     super.dispose();
   }
@@ -108,56 +157,21 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: SizedBox(
                       width: we * 2,
                       height: he * 0.16,
-                      child: ListView.builder(
+                      child: ListView(
                         physics: const BouncingScrollPhysics(),
-                        itemBuilder: (context, i) {
-                          return Card(
-                            margin: const EdgeInsets.only(left: 23),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15)),
-                            clipBehavior: Clip.antiAlias,
-                            elevation: 2,
-                            shadowColor: Colors.black.withOpacity(0.2),
-                            child: Container(
-                              width: we * 0.5,
-                              height: he * 0.1,
-                              margin: const EdgeInsets.only(
-                                top: 25,
-                                left: 14,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "${noted.length.toString()} tasks",
-                                    style: TextStyle(
-                                        color: Colors.grey.withOpacity(0.9)),
-                                  ),
-                                  SizedBox(
-                                    height: he * 0.01,
-                                  ),
-                                  Text(
-                                    tasklist[i].title,
-                                    style: TextStyle(
-                                      fontSize: 23,
-                                      color: Theme.of(context).primaryColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(height: he * 0.03),
-                                  Padding(
-                                      padding: const EdgeInsets.only(right: 30),
-                                      child: LineProgress(
-                                        value: noted.length.toDouble(),
-                                        Color: tasklist[i].progresscolor,
-                                      )),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
+                        children: [
+                          _buildCategories(context, tasklist[0].title,
+                              tasklist[0].progresscolor, Business),
+                          _buildCategories(context, tasklist[1].title,
+                              tasklist[1].progresscolor, Personal),
+                          _buildCategories(context, tasklist[2].title,
+                              tasklist[2].progresscolor, Programming),
+                          _buildCategories(context, tasklist[3].title,
+                              tasklist[3].progresscolor, Sports),
+                          _buildCategories(context, tasklist[4].title,
+                              tasklist[4].progresscolor, Family),
+                        ],
                         scrollDirection: Axis.horizontal,
-                        itemCount: tasklist.length,
                       ),
                     ),
                   ),
@@ -181,15 +195,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: isLoading
                               ? const CircularProgressIndicator()
                               : noted.isEmpty
-                                  ? Container(
-                                      margin: const EdgeInsets.only(
-                                          left: 130, top: 120),
-                                      child: Text("No Tasks",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                          )))
+                                  ? Center(
+                                      child: Lottie.asset(
+                                        "assets/78347-no-search-result.json",
+                                        width: we * 0.6,
+                                      ),
+                                    )
                                   : ListView.builder(
                                       itemCount: noted.length,
                                       itemBuilder:
@@ -255,7 +266,84 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Widget _buildCategories(
+      context, String title, Color lineProgress, int numbertask) {
+    var we = MediaQuery.of(context).size.width;
+    var he = MediaQuery.of(context).size.height;
+
+    return Card(
+      margin: const EdgeInsets.only(left: 23),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      clipBehavior: Clip.antiAlias,
+      elevation: 2,
+      shadowColor: Colors.black.withOpacity(0.2),
+      child: Container(
+        width: we * 0.5,
+        height: he * 0.1,
+        margin: const EdgeInsets.only(
+          top: 25,
+          left: 14,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "$numbertask task",
+              style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+            ),
+            SizedBox(
+              height: he * 0.01,
+            ),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 23,
+                color: Theme.of(context).primaryColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: he * 0.03),
+            Padding(
+                padding: const EdgeInsets.only(right: 30),
+                child: LineProgress(
+                  value: numbertask.toDouble(),
+                  Color: lineProgress,
+                )),
+          ],
+        ),
+      ),
+    );
+  }
+
   void deleteitem(Notes note) {
+    if (note.title == "Business") {
+      setState(() {
+        Business--;
+      });
+    } else if (note.title == "Personal") {
+      setState(() {
+        Personal--;
+      });
+    } else if (note.title == "Programming") {
+      setState(() {
+        Programming--;
+      });
+    } else if (note.title == "Sports") {
+      setState(() {
+        Sports--;
+      });
+    } else if (note.title == "Family") {
+      setState(() {
+        Family--;
+      });
+    } else {
+      Business = 0;
+      Personal = 0;
+      Programming = 0;
+      Sports = 0;
+      Family = 0;
+    }
+
     note.delete();
   }
 
