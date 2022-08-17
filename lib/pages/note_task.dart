@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/Animation/fadeAnimation.dart';
 import 'package:flutter_todo/db/noted.dart';
+import 'package:flutter_todo/pages/Drawerhiden/hidendrawer.dart';
 import 'package:flutter_todo/pages/note_form.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 import '../main.dart';
 
 enum SelectedColor { Business, School, Personal, Sports, Family }
@@ -350,7 +352,11 @@ class _Note_TaskState extends State<Note_Task> {
     );
 
     box.add(note);
-    Navigator.of(context).pop();
+    Navigator.of(context).push(PageTransition(
+        child: HidenDrawer(
+          animationtime: 0,
+        ),
+        type: PageTransitionType.fade));
   }
 
   // Todo update note in db
@@ -359,6 +365,10 @@ class _Note_TaskState extends State<Note_Task> {
     note.description = description;
     note.title = selects[1];
     note.save();
-    Navigator.of(context).pop();
+    Navigator.of(context).push(PageTransition(
+        child: HidenDrawer(
+          animationtime: 0,
+        ),
+        type: PageTransitionType.fade));
   }
 }
