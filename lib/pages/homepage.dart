@@ -1,374 +1,368 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_todo/Animation/fadeAnimation.dart';
+import 'package:flutter_todo/main.dart';
+import 'package:flutter_todo/pages/note_task.dart';
+import 'package:flutter_todo/db/boxes.dart';
 import 'package:flutter_todo/db/noted.dart';
-import 'package:flutter_todo/pages/Drawerhiden/hidendrawer.dart';
-import 'package:flutter_todo/pages/note_form.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:lottie/lottie.dart';
 import 'package:page_transition/page_transition.dart';
-import '../main.dart';
+import '../data/shared/Task_saved.dart';
+import '../data/tasks.dart';
+import '../Animation/linearprogress.dart';
+import '../data/time_say.dart';
+import 'button_change_them.dart';
+import 'card_tasks.dart';
 
-enum SelectedColor { Business, School, Personal, Sports, Family }
+// late Box box;
 
-class Note_Task extends StatefulWidget {
-  final Notes note;
-
-  const Note_Task({Key? key, required this.note}) : super(key: key);
+class MyHomePage extends StatefulWidget {
+  VoidCallback opendrawer;
+  double animationtime;
+  MyHomePage({required this.opendrawer, required this.animationtime});
 
   @override
-  _Note_TaskState createState() => _Note_TaskState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _Note_TaskState extends State<Note_Task> {
-  late String description;
+class _MyHomePageState extends State<MyHomePage> {
+  List<String> all_selected_tasks = []; // your tasks
 
-  bool Ison = false;
-  final _controller = TextEditingController();
+  int Business = 0;
+  int Personal = 0;
+  int Programming = 0;
+  int Sports = 0;
+  int Family = 0;
 
-  bool isactive = true;
+  bool isLoading = false;
+  final noted = box.values.toList().cast<Notes>();
 
-  SelectedColor selected = SelectedColor.Business;
-  // SelectedColor? title;
+  void cheakTag() {
+    noted.forEach((element) {
+      if (element.title == "Business") {
+        setState(() {
+          Business++;
+        });
+      } else if (element.title == "Personal") {
+        setState(() {
+          Personal++;
+        });
+      } else if (element.title == "Programming") {
+        setState(() {
+          Programming++;
+        });
+      } else if (element.title == "Sports") {
+        setState(() {
+          Sports++;
+        });
+      } else if (element.title == "Family") {
+        setState(() {
+          Family++;
+        });
+      } else {
+        Business = 0;
+        Personal = 0;
+        Programming = 0;
+        Sports = 0;
+        Family = 0;
+      }
+    });
+  }
 
-  String text = 'New Task';
-
-  Color colorbutton = const Color(0xFF002FFF);
-
-  @override
   void initState() {
+    all_selected_tasks = TaskerPreference.getString() ?? [];
+    cheakTag();
     super.initState();
-    description = widget.note.description;
-    if (widget.note.title == "Business") {
-      selected = SelectedColor.Business;
-    } else if (widget.note.title == "Personal") {
-      selected = SelectedColor.Personal;
-    } else if (widget.note.title == "Sports") {
-      selected = SelectedColor.Sports;
-    } else if (widget.note.title == "School") {
-      selected = SelectedColor.School;
-    } else if (widget.note.title == "Family") {
-      selected = SelectedColor.Family;
-    }
   }
 
   @override
   void dispose() {
+    // TODO: close Hive_Database of Note ...
+    Hive.close();
     super.dispose();
-    _controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     var we = MediaQuery.of(context).size.width;
     var he = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      backgroundColor: const Color(0xffF4F6FD),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: SizedBox(
-          child: Column(
-            children: [
-              FadeAnimation(
-                delay: 0.2,
-                child: Container(
-                  margin: EdgeInsets.only(top: he * 0.05, left: we * 0.73),
-                  width: 50,
-                  height: 50,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      color: Colors.grey[300], shape: BoxShape.circle),
-                  child: Container(
-                      width: 47,
-                      height: 47,
-                      alignment: Alignment.center,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color(0xffF4F6FD),
+      body: ValueListenableBuilder<Box<Notes>>(
+          valueListenable: Boxes.getNote().listenable(),
+          builder: (context, box, _) {
+            final noted = box.values.toList().cast<Notes>();
+            return SafeArea(
+              child: SizedBox(
+                  width: we,
+                  height: he,
+                  child: Column(children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: we * 0.02,
+                        ),
+                        IconButton(
+                            onPressed: widget.opendrawer,
+                            icon: const Icon(
+                              Icons.drag_handle_outlined,
+                              color: Colors.grey,
+                              size: 35,
+                            )),
+                        SizedBox(
+                          width: we * 0.7,
+                        ),
+                        SizedBox(
+                          width: we * 0.01,
+                        ),
+                        ChangeThembutton(),
+                        SizedBox(
+                          width: we * 0.02,
+                        ),
+                      ],
+                    ),
+                    FadeAnimation(
+                      delay: widget.animationtime,
+                      child: Container(
+                        margin: EdgeInsets.only(top: he * 0.02),
+                        width: we * 0.9,
+                        height: he * 0.15,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Timecall(),
+                            SizedBox(
+                              height: he * 0.06,
+                            ),
+                            Text(
+                              "CATEGORIES",
+                              style: TextStyle(
+                                  letterSpacing: 1,
+                                  color: Colors.grey.withOpacity(0.8),
+                                  fontSize: 13),
+                            ),
+                          ],
+                        ),
                       ),
-                      child: IconButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          icon: const Icon(
-                            Icons.close,
-                            color: Colors.black,
-                            size: 20,
-                          ))),
-                ),
-              ),
-              FadeAnimation(
-                  delay: 0.3,
-                  child: NoteFormWidget(
-                      description: description,
-                      onChangedDescription: (description) {
-                        setState(() => this.description = description);
-                      })),
-              FadeAnimation(delay: 0.4, child: _buidTage()),
-              SizedBox(height: he * 0.28),
-              FadeAnimation(
-                  delay: 0.4,
-                  child: widget.note.description == ""
-                      ? _buildButtonCreate(context)
-                      : _buildButtonSave(context))
-            ],
-          ),
+                    ),
+                    FadeAnimation(
+                      delay: widget.animationtime,
+                      child: SizedBox(
+                        width: we * 2,
+                        height: he * 0.16,
+                        child: ListView(
+                          physics: const BouncingScrollPhysics(),
+                          children: [
+                            _buildCategories(context, tasklist[0].title,
+                                tasklist[0].progresscolor, Business),
+                            _buildCategories(context, tasklist[1].title,
+                                tasklist[1].progresscolor, Personal),
+                            _buildCategories(context, tasklist[2].title,
+                                tasklist[2].progresscolor, Programming),
+                            _buildCategories(context, tasklist[3].title,
+                                tasklist[3].progresscolor, Sports),
+                            _buildCategories(context, tasklist[4].title,
+                                tasklist[4].progresscolor, Family),
+                          ],
+                          scrollDirection: Axis.horizontal,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: he * 0.04,
+                    ),
+                    Container(
+                      alignment: Alignment.topLeft,
+                      margin: const EdgeInsets.only(left: 15, bottom: 15),
+                      child: Text("TODAY'S TASKS",
+                          style: TextStyle(
+                              letterSpacing: 1,
+                              color: Colors.grey.withOpacity(0.8),
+                              fontSize: 13)),
+                    ),
+                    FadeAnimation(
+                        delay: widget.animationtime,
+                        child: SizedBox(
+                            width: we * 0.9,
+                            height: he * 0.4,
+                            child: isLoading
+                                ? const CircularProgressIndicator()
+                                : noted.isEmpty
+                                    ? Center(
+                                        child: Lottie.asset(
+                                          "assets/78347-no-search-result.json",
+                                          width: we * 0.6,
+                                        ),
+                                      )
+                                    : ListView.builder(
+                                        itemCount: noted.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          // ignore: non_constant_identifier_names
+                                          final IsSelected =
+                                              all_selected_tasks.contains(
+                                                  noted[index].description);
+                                          return Slidable(
+                                              endActionPane: ActionPane(
+                                                motion: const StretchMotion(),
+                                                children: [
+                                                  SlidableAction(
+                                                    onPressed: (context) =>
+                                                        deleteitem(
+                                                            noted[index]),
+                                                    backgroundColor:
+                                                        const Color(0xFFFE4A49),
+                                                    foregroundColor:
+                                                        Colors.white,
+                                                    icon: Icons.delete,
+                                                    label: "Delete",
+                                                  ),
+                                                  SlidableAction(
+                                                    onPressed: (context) async {
+                                                      await Navigator.of(
+                                                              context)
+                                                          .push(
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          Note_Task(
+                                                                            note:
+                                                                                noted[index],
+                                                                          )));
+                                                    },
+                                                    backgroundColor:
+                                                        const Color(0xFF21B7CA),
+                                                    foregroundColor:
+                                                        Colors.white,
+                                                    label: "Edite",
+                                                    icon: Icons.edit,
+                                                  ),
+                                                ],
+                                              ),
+                                              child: builditem(
+                                                noted[index],
+                                                IsSelected,
+                                              ));
+                                        },
+                                        physics: const BouncingScrollPhysics(),
+                                      ))),
+                  ])),
+            );
+          }),
+      floatingActionButton: FadeAnimation(
+        delay: widget.animationtime,
+        child: FloatingActionButton(
+          onPressed: () async {
+            await Navigator.of(context).push(PageTransition(
+                type: PageTransitionType.fade,
+                child: Note_Task(
+                    note: Notes(description: "", title: "Business"))));
+          },
+          backgroundColor:
+              const FloatingActionButtonThemeData().backgroundColor,
+          child: const Icon(Icons.add),
         ),
       ),
     );
   }
 
-  // TODO Update button ...
-  Widget _buildButtonCreate(BuildContext contex) {
+  Widget _buildCategories(
+      context, String title, Color lineProgress, int numbertask) {
     var we = MediaQuery.of(context).size.width;
     var he = MediaQuery.of(context).size.height;
-    return Container(
-        width: we * 0.4,
-        height: 50,
-        margin: EdgeInsets.only(left: we * 0.45),
-        child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                primary: colorbutton,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(40))),
-            onPressed: () {
-              if (description.isNotEmpty & selected.toString().isNotEmpty) {
-                List selects = selected.toString().split(".");
-                addNote();
-              } else {
-                setState(() {
-                  text = 'Filed';
-                  colorbutton = Colors.red;
-                });
-              }
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  text,
-                  style: GoogleFonts.lato(color: Colors.white),
-                ),
-                SizedBox(
-                  width: we * 0.03,
-                ),
-                const Icon(
-                  Icons.expand_less_outlined,
-                  color: Colors.white,
-                )
-              ],
-            )));
-  }
 
-  // TODO Save button ..
-  Widget _buildButtonSave(BuildContext contex) {
-    var we = MediaQuery.of(context).size.width;
-    var he = MediaQuery.of(context).size.height;
-    return Container(
-      width: we * 0.4,
-      height: 50,
-      margin: EdgeInsets.only(left: we * 0.45),
-      child: ElevatedButton(
-          onPressed: () => updateNote(widget.note, description),
-          style: ElevatedButton.styleFrom(
-              primary: const Color(0xFF002FFF),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40))),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Save",
-                style: GoogleFonts.lato(color: Colors.white),
-              ),
-              SizedBox(
-                width: we * 0.03,
-              ),
-              const Icon(
-                Icons.edit,
-                color: Colors.white,
-              )
-            ],
-          )),
-    );
-  }
-
-  Widget _buidTage() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return Card(
+      margin: const EdgeInsets.only(left: 23),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      clipBehavior: Clip.antiAlias,
+      elevation: 2,
+      shadowColor: Colors.black.withOpacity(0.2),
+      child: Container(
+        width: we * 0.5,
+        height: he * 0.1,
+        margin: const EdgeInsets.only(
+          top: 25,
+          left: 14,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  selected = SelectedColor.Business;
-                });
-              },
-              child: Container(
-                alignment: Alignment.center,
-                width: 90,
-                height: 40,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                        color: selected == SelectedColor.Business
-                            ? Colors.blue
-                            : Colors.white,
-                        width: selected == SelectedColor.Business ? 3 : 0),
-                    color: selected == SelectedColor.Business
-                        ? const Color(0xFFAC05FF).withOpacity(0.6)
-                        : Colors.grey.withOpacity(0.5)),
-                child: const Text(
-                  'Business',
-                  style: TextStyle(color: Colors.white),
-                ),
+            Text(
+              "$numbertask task",
+              style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+            ),
+            SizedBox(
+              height: he * 0.01,
+            ),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 23,
+                color: Theme.of(context).primaryColor,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  selected = SelectedColor.Personal;
-                });
-              },
-              child: Container(
-                margin: const EdgeInsets.only(left: 14),
-                alignment: Alignment.center,
-                width: 90,
-                height: 40,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                        color: selected == SelectedColor.Personal
-                            ? Colors.blue
-                            : Colors.white,
-                        width: selected == SelectedColor.Personal ? 3 : 0),
-                    color: selected == SelectedColor.Personal
-                        ? const Color(0xFF0011FF).withOpacity(0.6)
-                        : Colors.grey.withOpacity(0.5)),
-                child: const Text(
-                  'Personal',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  selected = SelectedColor.Sports;
-                });
-              },
-              child: Container(
-                margin: const EdgeInsets.only(left: 14),
-                alignment: Alignment.center,
-                width: 90,
-                height: 40,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                        color: selected == SelectedColor.Sports
-                            ? Colors.blue
-                            : Colors.white,
-                        width: selected == SelectedColor.Sports ? 3 : 0),
-                    color: selected == SelectedColor.Sports
-                        ? Colors.red.withOpacity(0.6)
-                        : Colors.grey.withOpacity(0.5)),
-                child: const Text(
-                  'Sports',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
+            SizedBox(height: he * 0.03),
+            Padding(
+                padding: const EdgeInsets.only(right: 30),
+                child: LineProgress(
+                  value: numbertask.toDouble(),
+                  Color: lineProgress,
+                )),
           ],
         ),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  selected = SelectedColor.School;
-                });
-              },
-              child: Container(
-                alignment: Alignment.center,
-                width: 90,
-                height: 40,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                        color: selected == SelectedColor.School
-                            ? Colors.blue
-                            : Colors.white,
-                        width: selected == SelectedColor.School ? 3 : 0),
-                    color: selected == SelectedColor.School
-                        ? Colors.green.withOpacity(0.6)
-                        : Colors.grey.withOpacity(0.5)),
-                child: const Text(
-                  'School',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  selected = SelectedColor.Family;
-                });
-              },
-              child: Container(
-                margin: const EdgeInsets.only(left: 14),
-                alignment: Alignment.center,
-                width: 90,
-                height: 40,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                        color: selected == SelectedColor.Family
-                            ? Colors.blue
-                            : Colors.white,
-                        width: selected == SelectedColor.Family ? 3 : 0),
-                    color: selected == SelectedColor.Family
-                        ? Colors.orange.withOpacity(0.6)
-                        : Colors.grey.withOpacity(0.5)),
-                child: const Text(
-                  'Family',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ],
-        )
-      ],
+      ),
     );
   }
 
-  // Todo add note in db
-  Future addNote() async {
-    List selects = selected.toString().split(".");
-    final note = Notes(
-      description: description,
-      title: selects[1],
-    );
+  void deleteitem(Notes note) {
+    if (note.title == "Business") {
+      setState(() {
+        Business == 0 ? Business : Business--;
+      });
+    } else if (note.title == "Personal") {
+      setState(() {
+        Personal == 0 ? Personal : Personal--;
+      });
+    } else if (note.title == "Programming") {
+      setState(() {
+        Programming == 0 ? Programming : Programming--;
+      });
+    } else if (note.title == "Sports") {
+      setState(() {
+        Sports == 0 ? Sports : Sports--;
+      });
+    } else if (note.title == "Family") {
+      setState(() {
+        Family == 0 ? Family : Family--;
+      });
+    } else {
+      Business = 0;
+      Personal = 0;
+      Programming = 0;
+      Sports = 0;
+      Family = 0;
+    }
 
-    box.add(note);
-    Navigator.of(context).push(PageTransition(
-        child: HidenDrawer(
-          animationtime: 0,
-        ),
-        type: PageTransitionType.fade));
+    note.delete();
   }
 
-  // Todo update note in db
-  Future updateNote(Notes note, String description) async {
-    List selects = selected.toString().split(".");
-    note.description = description;
-    note.title = selects[1];
-    note.save();
-    Navigator.of(context).push(PageTransition(
-        child: HidenDrawer(
-          animationtime: 0,
-        ),
-        type: PageTransitionType.fade));
+// TODO : Tasks Items ...
+  Widget builditem(Notes item, IsSelected) {
+    return CardTasks(
+      Index: 1,
+      onSelected: (tasks) async {
+        setState(() {
+          IsSelected
+              ? all_selected_tasks.remove(item.description)
+              : all_selected_tasks.add(item.description);
+        });
+        TaskerPreference.setStringList(all_selected_tasks);
+      },
+      isActive: IsSelected,
+      taskuser: item,
+    );
   }
 }
