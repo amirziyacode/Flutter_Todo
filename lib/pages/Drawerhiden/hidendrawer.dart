@@ -4,12 +4,12 @@ import 'Drawer_widget.dart';
 import 'package:flutter/services.dart';
 
 class HidenDrawer extends StatefulWidget {
-  HidenDrawer({Key? key}) : super(key: key);
+  double animationtime;
+  HidenDrawer({Key? key, required this.animationtime}) : super(key: key);
 
   @override
   State<HidenDrawer> createState() => _HidenDrawerState();
 }
-
 class _HidenDrawerState extends State<HidenDrawer> {
   late double xOffset;
   late double yOffset;
@@ -25,7 +25,6 @@ class _HidenDrawerState extends State<HidenDrawer> {
       scaleFactor = 0.85;
       isDrawingOpen = true;
     });
-
   }
 
   void closeDrawer() {
@@ -77,6 +76,7 @@ class _HidenDrawerState extends State<HidenDrawer> {
             borderRadius: BorderRadius.circular(isDrawingOpen ? 30 : 0),
             child: MyHomePage(
               opendrawer: onpenDrawer,
+              animationtime: widget.animationtime,
             ),
           )),
     );
