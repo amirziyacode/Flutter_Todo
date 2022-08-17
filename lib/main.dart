@@ -17,7 +17,7 @@ Future main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget{
+class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
@@ -30,7 +30,9 @@ class MyApp extends StatelessWidget{
           themeMode: themProvider.themeMode,
           darkTheme: Mytheme.darkthem,
           theme: Mytheme.lightthem,
-          home: HidenDrawer(),
+          home: HidenDrawer(
+            animationtime: 0.8,
+          ),
         );
       });
 }
